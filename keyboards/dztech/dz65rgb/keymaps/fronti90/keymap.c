@@ -8,30 +8,69 @@ unsigned char r_orange=0xFF;
 unsigned char g_orange=0x80;
 unsigned char b_orange=0x00;
 
-unsigned char r_green=0x00;
-unsigned char g_green=0xFF;
-unsigned char b_green=0x80;
+unsigned char r_green=0x44;
+unsigned char g_green=0xaa;
+unsigned char b_green=0x77;
 
-enum unicode_names {
-DESSS,
-DEBAE,
-DESAE,
-DEBOE,
-DESOE,
-DEBUE,
-DESUE,
-DEEUR,
+enum custom_keycodes {
+    DESS,
+    DEAE,
+    DEOE,
+    DEUE,
+    EUR,
 };
 
-const uint32_t PROGMEM unicode_map[] = {
-[DESSS]  = 0x00DF,  // ß
-[DEBAE] = 0x00C4,  // Ä
-[DESAE]  = 0x00E4, // ä
-[DEBOE]  = 0x00D6,  // Ö
-[DESOE] = 0x00F6,  // ö
-[DEBUE]  = 0x00DC, // Ü
-[DESUE]  = 0x00FC, // ü
-[DEEUR]  = 0x20AC, // €
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case DESS:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_S);
+      } else {
+        unregister_code(KC_S);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DEAE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_Q);
+        // causes A to send garbage on every layer
+      } else {
+        unregister_code(KC_Q);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DEOE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_P);
+      } else {
+        unregister_code(KC_P);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DEUE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_Y);
+      } else {
+        unregister_code(KC_Y);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case EUR:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_5);
+        // sends garbage instead of €
+      } else {
+        unregister_code(KC_5);
+        unregister_code(KC_RALT);
+      }
+      break;
+    }
+    return true;
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -51,9 +90,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [FN_LAYER] = LAYOUT_65_ansi(
         KC_GRV,        KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_TRNS,  KC_PGUP,
-        KC_TRNS,        KC_TRNS, KC_TRNS, X(DEEUR), KC_TRNS, KC_TRNS, KC_TRNS, XP(DESUE, DEBUE), KC_TRNS, XP(DESOE, DEBOE), KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,   KC_PGDN,
-        KC_CAPS,        XP(DESAE, DEBAE), XP(DESSS, DESSS), KC_TRNS, KC_TRNS, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_PSCR,
-        KC_TRNS,                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, UNICODE_MODE_WINC, UNICODE_MODE_LNX, KC_TRNS, KC_VOLU, KC_INS,
+        KC_TRNS,        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, DEUE, KC_TRNS, DEOE, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,   KC_PGDN,
+        KC_CAPS,        KC_TRNS, DESS, KC_TRNS, KC_TRNS, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_TRNS, KC_TRNS,          KC_TRNS, KC_PSCR,
+        KC_TRNS,                 KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_VOLU, KC_INS,
         KC_TRNS,        KC_TRNS, KC_TRNS,                            KC_MPLY,                   MAGIC_TOGGLE_NKRO, TG(1), KC_TRNS, KC_MPRV, KC_VOLD, KC_MNXT
     )
 };
